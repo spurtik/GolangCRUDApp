@@ -7,6 +7,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type CreateUserInput struct {
+	Name  string `json:"name" binding:"required"`
+	Email string `json:"email" binding:"required,email"`
+}
+
 // GET /users
 // Find all users
 func FindUsers(ctx *gin.Context) {
@@ -19,7 +24,7 @@ func FindUsers(ctx *gin.Context) {
 // POST /user
 // Create user
 func CreateUser(ctx *gin.Context) {
-	var input models.CreateUserInput
+	var input CreateUserInput
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -52,7 +57,7 @@ func UpdateUserById(c *gin.Context) {
 	}
 
 	// Vaidate input
-	var input models.UpdateUser
+	var input models.User
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
